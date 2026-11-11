@@ -1,0 +1,8 @@
+{
+  "name": "database-systems-shop",
+  "private": true,
+  "type": "module",
+  "description": "Follow-along shop database and browser playground for the Database Systems lectures",
+  "scripts": { "check": "node test/check.mjs ../series/database-systems/assets/transcripts/*.json", "serve": "python3 -m http.server 8077" },
+  "devDependencies": { "@electric-sql/pglite": "0.5.16" }
+}

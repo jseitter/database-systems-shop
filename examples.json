@@ -1,0 +1,23 @@
+{
+  "07": {
+    "title": "Tables, rows and keys",
+    "intro": "Run these in order, just like in the lecture. Click one to load it, then press Run.",
+    "steps": [
+      {"label": "Everything in the customers table", "sql": "SELECT * FROM customers;"},
+      {"label": "Only the customer with id 2", "sql": "SELECT * FROM customers WHERE id = 2;"},
+      {"label": "The table's structure", "sql": "\\d customers"},
+      {"label": "A second Grace: same name, new key", "sql": "INSERT INTO customers VALUES (4, 'Grace', 'London');"},
+      {"label": "Look again: two Graces, two keys", "sql": "SELECT * FROM customers;"},
+      {"label": "A second customer with id 2?", "sql": "INSERT INTO customers VALUES (2, 'Linus', 'Helsinki');"},
+      {"label": "A customer without an id?", "sql": "INSERT INTO customers VALUES (NULL, 'Linus', 'Helsinki');"},
+      {"label": "A price that is not a number?", "sql": "INSERT INTO products VALUES (5, 'Mug', 'cheap', 'home');"},
+      {"label": "All tables of the shop", "sql": "\\dt"},
+      {"label": "The products", "sql": "SELECT * FROM products;"},
+      {"label": "The orders", "sql": "SELECT * FROM orders;"}
+    ],
+    "exercise": {
+      "task": "Add yourself to the shop as customer 5, with your own city. Then try to add a friend with the same id. What does the database say, and how do you get your friend in?",
+      "answer": "INSERT INTO customers VALUES (5, 'Your name', 'Your city'); works. The same id again is refused: duplicate key value violates unique constraint \"customers_pkey\". Give your friend a new key, for example 6."
+    }
+  }
+}

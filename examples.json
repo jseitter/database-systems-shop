@@ -3,21 +3,96 @@
     "title": "Tables, rows and keys",
     "intro": "Run these in order, just like in the lecture. Click one to load it, then press Run.",
     "steps": [
-      {"label": "Everything in the customers table", "sql": "SELECT * FROM customers;"},
-      {"label": "Only the customer with id 2", "sql": "SELECT * FROM customers WHERE id = 2;"},
-      {"label": "The table's structure", "sql": "\\d customers"},
-      {"label": "A second Grace: same name, new key", "sql": "INSERT INTO customers VALUES (4, 'Grace', 'London');"},
-      {"label": "Look again: two Graces, two keys", "sql": "SELECT * FROM customers;"},
-      {"label": "A second customer with id 2?", "sql": "INSERT INTO customers VALUES (2, 'Linus', 'Helsinki');"},
-      {"label": "A customer without an id?", "sql": "INSERT INTO customers VALUES (NULL, 'Linus', 'Helsinki');"},
-      {"label": "A price that is not a number?", "sql": "INSERT INTO products VALUES (5, 'Mug', 'cheap', 'home');"},
-      {"label": "All tables of the shop", "sql": "\\dt"},
-      {"label": "The products", "sql": "SELECT * FROM products;"},
-      {"label": "The orders", "sql": "SELECT * FROM orders;"}
+      {
+        "label": "Everything in the customers table",
+        "sql": "SELECT * FROM customers;"
+      },
+      {
+        "label": "Only the customer with id 2",
+        "sql": "SELECT * FROM customers WHERE id = 2;"
+      },
+      {
+        "label": "The table's structure",
+        "sql": "\\d customers"
+      },
+      {
+        "label": "A second Grace: same name, new key",
+        "sql": "INSERT INTO customers VALUES (4, 'Grace', 'London');"
+      },
+      {
+        "label": "Look again: two Graces, two keys",
+        "sql": "SELECT * FROM customers;"
+      },
+      {
+        "label": "A second customer with id 2?",
+        "sql": "INSERT INTO customers VALUES (2, 'Linus', 'Helsinki');"
+      },
+      {
+        "label": "A customer without an id?",
+        "sql": "INSERT INTO customers VALUES (NULL, 'Linus', 'Helsinki');"
+      },
+      {
+        "label": "A price that is not a number?",
+        "sql": "INSERT INTO products VALUES (5, 'Mug', 'cheap', 'home');"
+      },
+      {
+        "label": "All tables of the shop",
+        "sql": "\\dt"
+      },
+      {
+        "label": "The products",
+        "sql": "SELECT * FROM products;"
+      },
+      {
+        "label": "The orders",
+        "sql": "SELECT * FROM orders;"
+      }
     ],
     "exercise": {
       "task": "Add yourself to the shop as customer 5, with your own city. Then try to add a friend with the same id. What does the database say, and how do you get your friend in?",
       "answer": "INSERT INTO customers VALUES (5, 'Your name', 'Your city'); works. The same id again is refused: duplicate key value violates unique constraint \"customers_pkey\". Give your friend a new key, for example 6."
+    }
+  },
+  "08a": {
+    "title": "Asking questions with SQL",
+    "intro": "Run these in order, just like in the lecture. Click one to load it, then press Run. Then change them: other columns, other tests, other orders.",
+    "steps": [
+      {
+        "label": "Name and city of every customer",
+        "sql": "SELECT name, city FROM customers;"
+      },
+      {
+        "label": "Price with tax, rounded",
+        "sql": "SELECT name, price, round(price * 1.19, 2) AS with_tax FROM products;"
+      },
+      {
+        "label": "Products over 20",
+        "sql": "SELECT name, price FROM products WHERE price > 20;"
+      },
+      {
+        "label": "The trap: AND before OR",
+        "sql": "SELECT name, category, price FROM products WHERE category = 'home' OR category = 'travel' AND price < 20;"
+      },
+      {
+        "label": "The same with brackets",
+        "sql": "SELECT name, category, price FROM products WHERE (category = 'home' OR category = 'travel') AND price < 20;"
+      },
+      {
+        "label": "Customers in three cities",
+        "sql": "SELECT name, city FROM customers WHERE city IN ('London', 'Boston', 'Helsinki');"
+      },
+      {
+        "label": "Prices between 5 and 25 (both ends count)",
+        "sql": "SELECT name, price FROM products WHERE price BETWEEN 5 AND 25;"
+      },
+      {
+        "label": "The three most expensive products",
+        "sql": "SELECT name, price FROM products ORDER BY price DESC LIMIT 3;"
+      }
+    ],
+    "exercise": {
+      "task": "Find all orders from March 2025 with a quantity of more than 2, newest first.",
+      "answer": "SELECT * FROM orders WHERE ordered_on BETWEEN '2025-03-01' AND '2025-03-31' AND quantity > 2 ORDER BY ordered_on DESC;  gives orders 12, 9, 6 and 3."
     }
   }
 }

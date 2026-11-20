@@ -94,5 +94,47 @@
       "task": "Find all orders from March 2025 with a quantity of more than 2, newest first.",
       "answer": "SELECT * FROM orders WHERE ordered_on BETWEEN '2025-03-01' AND '2025-03-31' AND quantity > 2 ORDER BY ordered_on DESC;  gives orders 12, 9, 6 and 3."
     }
+  },
+  "08b": {
+    "title": "SQL: text and missing values",
+    "intro": "Run these in order, just like in the lecture. Click one to load it, then press Run. Then try your own patterns and NULL tests.",
+    "steps": [
+      {
+        "label": "The puzzle: not in London",
+        "sql": "SELECT name, city FROM customers WHERE city <> 'London';"
+      },
+      {
+        "label": "Second letter d",
+        "sql": "SELECT name FROM customers WHERE name LIKE '_d%';"
+      },
+      {
+        "label": "ILIKE ignores capital letters",
+        "sql": "SELECT name, city FROM customers WHERE city ILIKE 'london';"
+      },
+      {
+        "label": "A label: name and category",
+        "sql": "SELECT name || ' (' || category || ')' AS label FROM products;"
+      },
+      {
+        "label": "= NULL finds nothing",
+        "sql": "SELECT name FROM customers WHERE city = NULL;"
+      },
+      {
+        "label": "IS NULL",
+        "sql": "SELECT name FROM customers WHERE city IS NULL;"
+      },
+      {
+        "label": "coalesce: unknown instead of nothing",
+        "sql": "SELECT name, coalesce(city, 'unknown') AS city FROM customers;"
+      },
+      {
+        "label": "The distinct cities, sorted",
+        "sql": "SELECT DISTINCT city FROM customers ORDER BY city;"
+      }
+    ],
+    "exercise": {
+      "task": "Find every customer whose name ends in a small 'a', or who has no city at all. Show the word 'unknown' instead of an empty city.",
+      "answer": "SELECT name, coalesce(city, 'unknown') AS city FROM customers WHERE name LIKE '%a' OR city IS NULL;  gives Ada (London), Barbara (unknown) and Katherine (unknown)."
+    }
   }
 }

@@ -167,11 +167,11 @@
       },
       {
         "label": "CASE: price bands",
-        "sql": "SELECT CASE WHEN price < 10 THEN 'cheap' WHEN price < 30 THEN 'medium' ELSE 'expensive' END AS band, count(*) FROM products GROUP BY band ORDER BY count(*) DESC;"
+        "sql": "SELECT CASE WHEN price < 10 THEN 'cheap'\n            WHEN price < 30 THEN 'medium'\n            ELSE 'expensive' END AS band, count(*)\nFROM products GROUP BY band ORDER BY count(*) DESC;"
       },
       {
         "label": "Orders per month",
-        "sql": "SELECT extract(month FROM ordered_on) AS month, count(*), sum(quantity) AS items FROM orders GROUP BY month ORDER BY month;"
+        "sql": "SELECT extract(month FROM ordered_on) AS month, count(*), sum(quantity) AS items\nFROM orders GROUP BY month ORDER BY month;"
       }
     ],
     "exercise": {

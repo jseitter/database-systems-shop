@@ -72,7 +72,7 @@ const center = (s, w) => { const l = Math.floor((w - s.length) / 2); return " ".
 export function table(fields, rows, { title, footer = true } = {}) {
   const names = fields.map((f) => f.name);
   const right = fields.map((f) => RIGHT.has(f.dataTypeID));
-  const cells = rows.map((r) => fields.map((f) => (r[f.name] ?? "") + ""));
+  const cells = rows.map((r) => Array.isArray(r) ? r.map((v) => (v ?? "") + "") : fields.map((f) => (r[f.name] ?? "") + ""));
   const w = names.map((n, c) => Math.max(n.length, ...cells.map((r) => r[c].length)));
   const lines = [];
   const header = " " + names.map((n, c) => center(n, w[c])).join(" | ") + " ";
@@ -201,7 +201,7 @@ export async function run(db, input) {
     if (s.meta) { steps.push({ cmd: s.meta, out: await meta(db, s.meta), ok: true }); continue; }
     if (onlyComments(s.sql)) continue;
     try {
-      const res = await db.query(s.sql, [], { parsers: await rawParsersFor(db) });
+      const res = await db.query(s.sql, [], { parsers: await rawParsersFor(db), rowMode: "array" });  // arrays keep columns with the same name (count, count)
       const out = res.fields.length ? table(res.fields, res.rows) : tag(s.sql, res);
       steps.push({ cmd: shown(s.sql), out, ok: true });
     } catch (e) {

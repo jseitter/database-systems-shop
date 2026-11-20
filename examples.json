@@ -136,5 +136,47 @@
       "task": "Find every customer whose name ends in a small 'a', or who has no city at all. Show the word 'unknown' instead of an empty city.",
       "answer": "SELECT name, coalesce(city, 'unknown') AS city FROM customers WHERE name LIKE '%a' OR city IS NULL;  gives Ada (London), Barbara (unknown) and Katherine (unknown)."
     }
+  },
+  "08c": {
+    "title": "SQL: counting and grouping",
+    "intro": "Run these in order, just like in the lecture. Click one to load it, then press Run. Then try your own groups and counts.",
+    "steps": [
+      {
+        "label": "Best sellers: items per product",
+        "sql": "SELECT product_id, sum(quantity) AS items FROM orders GROUP BY product_id ORDER BY items DESC LIMIT 3;"
+      },
+      {
+        "label": "count(*), count(city), count(DISTINCT city)",
+        "sql": "SELECT count(*), count(city), count(DISTINCT city) FROM customers;"
+      },
+      {
+        "label": "Cheapest, dearest, average price",
+        "sql": "SELECT min(price), max(price), round(avg(price), 2) AS avg FROM products;"
+      },
+      {
+        "label": "Products per category",
+        "sql": "SELECT category, count(*) FROM products GROUP BY category ORDER BY count(*) DESC, category;"
+      },
+      {
+        "label": "The classic error",
+        "sql": "SELECT name, count(*) FROM customers;"
+      },
+      {
+        "label": "HAVING: groups with at least 2 products",
+        "sql": "SELECT category, count(*) FROM products GROUP BY category HAVING count(*) >= 2 ORDER BY category;"
+      },
+      {
+        "label": "CASE: price bands",
+        "sql": "SELECT CASE WHEN price < 10 THEN 'cheap' WHEN price < 30 THEN 'medium' ELSE 'expensive' END AS band, count(*) FROM products GROUP BY band ORDER BY count(*) DESC;"
+      },
+      {
+        "label": "Orders per month",
+        "sql": "SELECT extract(month FROM ordered_on) AS month, count(*), sum(quantity) AS items FROM orders GROUP BY month ORDER BY month;"
+      }
+    ],
+    "exercise": {
+      "task": "Which customers ordered more than 5 items in total? Show the customer id and the number of items, biggest first.",
+      "answer": "SELECT customer_id, sum(quantity) AS items FROM orders GROUP BY customer_id HAVING sum(quantity) > 5 ORDER BY items DESC;  gives customers 2 and 12 (10 items each), 1 (8) and 3 (6)."
+    }
   }
 }

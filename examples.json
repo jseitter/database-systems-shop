@@ -178,5 +178,55 @@
       "task": "Which customers ordered more than 5 items in total? Show the customer id and the number of items, biggest first.",
       "answer": "SELECT customer_id, sum(quantity) AS items FROM orders GROUP BY customer_id HAVING sum(quantity) > 5 ORDER BY items DESC;  gives customers 2 and 12 (10 items each), 1 (8) and 3 (6)."
     }
+  },
+  "08d": {
+    "title": "SQL: queries inside queries",
+    "intro": "Run steps 1 and 2 first: they add a customer and a product that lecture 08d needs. Then run the rest in order. \"Reset database\" brings the original shop back.",
+    "steps": [
+      {
+        "label": "New arrival 1: Donald, a customer without orders",
+        "sql": "INSERT INTO customers VALUES (13, 'Donald', 'Stanford');"
+      },
+      {
+        "label": "New arrival 2: a stapler nobody has bought",
+        "sql": "INSERT INTO products VALUES (11, 'Stapler', 9.50, 'stationery');"
+      },
+      {
+        "label": "Who bought the desk lamp? Step 1 by hand",
+        "sql": "SELECT customer_id FROM orders WHERE product_id = 3;"
+      },
+      {
+        "label": "The same question in one query: IN (SELECT ...)",
+        "sql": "SELECT name FROM customers\nWHERE id IN (SELECT customer_id FROM orders WHERE product_id = 3);"
+      },
+      {
+        "label": "More expensive than the average",
+        "sql": "SELECT name, price FROM products\nWHERE price > (SELECT avg(price) FROM products);"
+      },
+      {
+        "label": "Who never ordered?",
+        "sql": "SELECT name FROM customers WHERE id NOT IN (SELECT customer_id FROM orders);"
+      },
+      {
+        "label": "The NOT IN trap: a NULL in the list",
+        "sql": "SELECT name FROM products\nWHERE category NOT IN (SELECT category FROM products WHERE price > 20);"
+      },
+      {
+        "label": "The fix: keep NULL out of the list",
+        "sql": "SELECT name FROM products\nWHERE category NOT IN (SELECT category FROM products\n                       WHERE price > 20 AND category IS NOT NULL);"
+      },
+      {
+        "label": "Items per customer, on average: FROM (SELECT ...)",
+        "sql": "SELECT round(avg(items), 2) AS avg_items\nFROM (SELECT customer_id, sum(quantity) AS items FROM orders GROUP BY customer_id) AS t;"
+      },
+      {
+        "label": "Finally names: the big buyers",
+        "sql": "SELECT name FROM customers\nWHERE id IN (SELECT customer_id FROM orders GROUP BY customer_id HAVING sum(quantity) > 5);"
+      }
+    ],
+    "exercise": {
+      "task": "Show the names of all customers who bought something from the stationery category. Hint: a subquery inside a subquery.",
+      "answer": "SELECT name FROM customers WHERE id IN (SELECT customer_id FROM orders WHERE product_id IN (SELECT id FROM products WHERE category = 'stationery')) ORDER BY name;  gives Ada, Barbara, Edsger, Grace and Tim."
+    }
   }
 }
